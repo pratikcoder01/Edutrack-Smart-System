@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-4 pt-2">
+    <!-- Camera Section -->
+    <div class="col-lg-7 col-xl-8">
+        <div class="glass-card p-4 h-100 animate-fade-in stagger-1">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="mb-0 fw-bold">Registration Camera</h6>
+                <div class="system-status">
+                    <span class="status-dot pulse"></span>
+                    <span class="text-success small fw-semibold">Feed Active</span>
+                </div>
+            </div>
+            <div class="video-container" style="height: 480px;">
+                <img src="{{ url_for('video_feed') }}" class="w-100 h-100" style="object-fit: cover; border-radius: 12px;">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Form Section -->
+    <div class="col-lg-5 col-xl-4">
+        <div class="glass-card p-4 h-100 animate-fade-in stagger-2">
+            <h5 class="fw-bold mb-1">New Enrollment</h5>
+            <p class="text-muted small mb-4">Register student face data</p>
+            
+            <form action="/capture_photos" method="POST">
+                <div class="mb-3">
+                    <label class="text-secondary small fw-medium mb-1">Roll Number</label>
+                    <input type="text" name="roll" class="form-control" placeholder="e.g. 101" required>
+                </div>
+                <div class="mb-3">
+                    <label class="text-secondary small fw-medium mb-1">Full Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. John Doe" required>
+                </div>
+                <div class="mb-4">
+                    <label class="text-secondary small fw-medium mb-1">Class / Section</label>
+                    <input type="text" name="class" class="form-control" placeholder="e.g. CS-A" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-3 ripple mt-2">
+                    <i data-lucide="camera" class="me-2" style="width: 18px; height: 18px;"></i> Capture & Enroll
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if request.args.get('success') %}
+<!-- Toast representation for SaaS feel instead of window.alert -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0 glass-panel" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body fw-medium">
+                <i data-lucide="check-circle" class="me-2" style="width: 16px; height: 16px;"></i>
+                Student enrolled successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const toastEl = document.getElementById('successToast');
+        if (toastEl) {
+            const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+            toast.show();
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}

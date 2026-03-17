@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        Manual Attendance Override
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <input class="form-control mb-3" placeholder="Roll Number">
+            <select class="form-control mb-3">
+                <option>Present</option>
+                <option>Absent</option>
+            </select>
+            <button class="btn btn-warning">
+                Override Attendance
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

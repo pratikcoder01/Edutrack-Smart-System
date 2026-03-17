@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        Data Privacy & Consent
+    </div>
+    <div class="card-body">
+        <p>
+            This Smart Classroom System uses facial recognition strictly for
+            academic attendance purposes.
+        </p>
+        <ul>
+            <li>No data is shared with third parties</li>
+            <li>Images are encrypted and access-controlled</li>
+            <li>Attendance is lecture-time bound</li>
+        </ul>
+
+        <form method="post" action="/accept_privacy">
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" required>
+                <label class="form-check-label">
+                    I understand and agree to the usage of my data
+                </label>
+            </div>
+            <button class="btn btn-success">Continue</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

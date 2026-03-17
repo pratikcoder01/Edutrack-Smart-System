@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartClass AI - Intelligent Classroom Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #ffffff; overflow-x: hidden; }
+        
+        /* Navbar */
+        .landing-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.05), transparent 40%);
+            padding-top: 80px;
+        }
+
+        /* Typography */
+        .fw-black { font-weight: 900; }
+        .hero-title {
+            font-size: 4rem;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        
+        .gradient-text-accent {
+            background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Buttons matching SaaS Design */
+        .btn-landing-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+            transition: all 0.3s ease;
+        }
+        .btn-landing-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            color: white;
+        }
+
+        .btn-landing-outline {
+            background: white;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+        .btn-landing-outline:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            color: #0f172a;
+        }
+
+        /* Dashboard Preview Graphic */
+        .dashboard-preview {
+            position: relative;
+            margin-top: 3rem;
+            transform: perspective(1000px) rotateX(10deg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(12px);
+            padding: 10px;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+        .hero-section:hover .dashboard-preview {
+            transform: perspective(1000px) rotateX(0deg) translateY(-10px);
+        }
+        .preview-img { width: 100%; border-radius: 8px; border: 1px solid #f1f5f9; }
+
+        /* Generic Section Padding */
+        .section-padding { padding: 6rem 0; }
+        
+        /* Section Titles */
+        .section-title { font-size: 2.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 1rem; }
+        .section-subtitle { color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Feature Cards */
+        .feature-box {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #e2e8f0;
+        }
+        .feature-icon-wrapper {
+            width: 56px; height: 56px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Flow Architecture Section */
+        .flow-step { text-align: center; position: relative; padding: 2rem; }
+        .flow-icon { 
+            width: 80px; height: 80px; 
+            background: white; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 2px solid #f1f5f9;
+            position: relative;
+            z-index: 2;
+        }
+        /* Connectors */
+        @media (min-width: 992px) {
+            .flow-connector::after {
+                content: '';
+                position: absolute; top: 70px; right: -50%;
+                width: 100%; height: 2px;
+                background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+                z-index: 1;
+            }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: #0f172a;
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-bg-glow {
+            position: absolute; right: 0; top: 0; width: 50%; height: 100%;
+            background: radial-gradient(circle at center, rgba(37,99,235,0.4) 0%, transparent 70%);
+            opacity: 0.5;
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top landing-nav py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="SmartClass AI Logo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
+                <span class="fw-bold text-dark tracking-tight">SmartClass AI</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-medium" href="#how-it-works">How it Works</a></li>
+                </ul>
+                <div class="d-flex gap-3">
+                    <a href="/login" class="btn btn-link text-dark text-decoration-none fw-medium ripple px-0">Login</a>
+                    <a href="/register" class="btn btn-landing-primary ripple">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 animate-fade-in stagger-1">
+                    <h1 class="hero-title fw-black" style="font-size: clamp(3rem, 8vw, 5.5rem); letter-spacing: -0.05em; line-height: 1.1;">
+                        Automate Roll Calls.<br>
+                        <span class="gradient-text-accent">Visualize Intelligence.</span>
+                    </h1>
+                    <p class="hero-subtitle mt-4 mb-5" style="font-size: clamp(1.1rem, 2vw, 1.35rem); color: #475569;">
+                        The ultimate AI-powered smart classroom system. Lightning-fast facial recognition mapped directly to comprehensive SaaS attendance dashboards.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="/login" class="btn btn-primary btn-lg d-flex align-items-center gap-2 px-4 shadow-lg" style="border-radius: 14px;">
+                            Enter Dashboard <i data-lucide="arrow-right" style="width: 18px;"></i>
+                        </a>
+                        <a href="#how-it-works" class="btn btn-outline-dark btn-lg d-flex align-items-center gap-2 px-4" style="border-radius: 14px; border-color: #e2e8f0; font-weight: 500;">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Mockup Preview -->
+            <div class="row justify-content-center mt-5 mb-0 animate-fade-in stagger-2">
+                <div class="col-lg-10">
+                    <div class="dashboard-preview overflow-hidden" style="border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(255,255,255,0.4);">
+                        <!-- Custom CSS Skeleton Dashboard (User requested) -->
+                        <div class="bg-white rounded-4 overflow-hidden shadow-lg border border-light" style="max-height: 500px;">
+                            <!-- Top Window Bar -->
+                            <div class="d-flex align-items-center p-3 border-bottom gap-2" style="background-color: #fafafa;">
+                                <div class="rounded-circle" style="width: 10px; height: 10px; background-color: #ffb4a9;"></div>
+                                <div class="rounded-circle" style="width: 10px; height: 10px; background-color: #f7d54c;"></div>
+                                <div class="rounded-circle" style="width: 10px; height: 10px; background-color: #b7dbcb;"></div>
+                            </div>
+                            <!-- Dashboard Content Area -->
+                            <div class="p-4" style="background-color: #f8fafc;">
+                                <!-- Top 4 Cards Row -->
+                                <div class="row g-3 mb-3">
+                                    <!-- Stat Card 1 -->
+                                    <div class="col-3">
+                                        <div class="bg-white rounded p-3 border shadow-sm">
+                                            <div class="text-muted mb-1" style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Total Students</div>
+                                            <div class="text-dark fw-bold" style="font-size: 1.1rem; line-height: 1;">1,248</div>
+                                        </div>
+                                    </div>
+                                    <!-- Stat Card 2 -->
+                                    <div class="col-3">
+                                        <div class="bg-white rounded p-3 border shadow-sm">
+                                            <div class="text-muted mb-1" style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Avg Attendance</div>
+                                            <div class="text-dark fw-bold" style="font-size: 1.1rem; line-height: 1;">87%</div>
+                                        </div>
+                                    </div>
+                                    <!-- Stat Card 3 -->
+                                    <div class="col-3">
+                                        <div class="bg-white rounded p-3 border shadow-sm">
+                                            <div class="text-muted mb-1" style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Live Sessions</div>
+                                            <div class="text-dark fw-bold" style="font-size: 1.1rem; line-height: 1;">14</div>
+                                        </div>
+                                    </div>
+                                    <!-- Stat Card 4 -->
+                                    <div class="col-3">
+                                        <div class="bg-white rounded p-3 border shadow-sm">
+                                            <div class="text-muted mb-1" style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">System Status</div>
+                                            <div class="text-success fw-bold d-flex align-items-center gap-1" style="font-size: 0.9rem; line-height: 1.2;">
+                                                <div class="rounded-circle bg-success" style="width: 6px; height: 6px;"></div> Online
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Main Bottom Row -->
+                                <div class="row g-3">
+                                    <!-- Big Blue Chart Area -->
+                                    <div class="col-8">
+                                        <div class="bg-white rounded border shadow-sm p-4 h-100 position-relative overflow-hidden">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="text-dark fw-bold" style="font-size: 0.85rem;">Weekly Attendance Trend</div>
+                                                <div class="text-muted" style="font-size: 0.7rem;">Last 7 Days</div>
+                                            </div>
+                                            <!-- Fake SVG Line Chart -->
+                                            <svg viewBox="0 0 100 40" class="w-100" style="height: 120px; overflow: visible;">
+                                                <path d="M 0 30 Q 15 10 30 25 T 60 15 T 100 5 L 100 40 L 0 40 Z" fill="url(#blueGradient)" opacity="0.3"></path>
+                                                <path d="M 0 30 Q 15 10 30 25 T 60 15 T 100 5" fill="none" stroke="#0d6efd" stroke-width="2" stroke-linecap="round"></path>
+                                                <!-- Gradient Def -->
+                                                <defs>
+                                                    <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stop-color="#0d6efd"></stop>
+                                                        <stop offset="100%" stop-color="rgba(13, 110, 253, 0)"></stop>
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <!-- Right Side Chart Area -->
+                                    <div class="col-4">
+                                        <div class="bg-white rounded border shadow-sm p-4 h-100 d-flex flex-column justify-content-center align-items-center position-relative">
+                                            <div class="text-dark fw-bold w-100 text-start mb-3" style="font-size: 0.85rem;">Status Ratio</div>
+                                            <!-- Fake SVG Donut Chart -->
+                                            <svg viewBox="0 0 36 36" class="circular-chart" style="width: 100px; height: 100px;">
+                                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#fee2e2" stroke-width="4"></path>
+                                                <path class="circle" stroke-dasharray="87, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round"></path>
+                                            </svg>
+                                            <div class="position-absolute d-flex flex-column align-items-center" style="top: 50%; left: 50%; transform: translate(-50%, -10%);">
+                                                <span class="fw-bold text-dark" style="font-size: 1.1rem;">87%</span>
+                                                <span class="text-muted" style="font-size: 0.5rem; text-transform: uppercase;">Present</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding bg-light">
+        <div class="container">
+            <div class="text-center mb-5 reveal">
+                <h2 class="section-title">Built for the Modern Campus</h2>
+                <p class="section-subtitle">Cut administrative overhead by 90% with edge AI and beautiful analytics.</p>
+            </div>
+            
+            <div class="stat-grid mt-4">
+                <div class="reveal">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper bg-blue-soft text-primary">
+                            <i data-lucide="scan-face" style="width: 28px; height: 28px;"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-3">Live Edge Recognition</h4>
+                        <p class="text-muted mb-0">Processes high-definition webcam feeds locally via OpenCV to instantly match multiple students simultaneously without network latency.</p>
+                    </div>
+                </div>
+
+                <div class="reveal delay-100">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper bg-purple-soft text-purple" style="color: #8b5cf6;">
+                            <i data-lucide="bar-chart-3" style="width: 28px; height: 28px;"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-3">SaaS Visualizations</h4>
+                        <p class="text-muted mb-0">Track peak attendance trends and subject distributions on a fully responsive, animated Chart.js dashboard interface.</p>
+                    </div>
+                </div>
+
+                <div class="reveal delay-200">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper bg-green-soft text-success">
+                            <i data-lucide="shield-check" style="width: 28px; height: 28px;"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-3">Robust Data Integrity</h4>
+                        <p class="text-muted mb-0">Leverages secure SQLite relational databases and password hashing layers (PBKDF2) to ensure privacy for faculty interactions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="how-it-works" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 reveal">
+                <h2 class="section-title">How Data Flows</h2>
+                <p class="section-subtitle">A seamless pipeline from real-time classroom capture to actionable administrative insights.</p>
+            </div>
+
+            <div class="row align-items-center mt-5">
+                <div class="col-lg-3 col-md-6 reveal flow-connector">
+                    <div class="flow-step">
+                        <div class="flow-icon text-primary"><i data-lucide="video" style="width: 32px; height: 32px;"></i></div>
+                        <h6 class="fw-bold">1. Capture Feed</h6>
+                        <p class="small text-muted m-0">Live video streaming initiated by faculty during lecture.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 reveal delay-100 flow-connector">
+                    <div class="flow-step">
+                        <div class="flow-icon text-purple" style="color: #8b5cf6;"><i data-lucide="cpu" style="width: 32px; height: 32px;"></i></div>
+                        <h6 class="fw-bold">2. Extract Encodings</h6>
+                        <p class="small text-muted m-0">Python engine checks frames against 128-d face datasets.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 reveal delay-200 flow-connector">
+                    <div class="flow-step">
+                        <div class="flow-icon text-success"><i class="text-success" data-lucide="database" style="width: 32px; height: 32px;"></i></div>
+                        <h6 class="fw-bold">3. Database Push</h6>
+                        <p class="small text-muted m-0">Generates 50%+ ratio confidence limits to log securely.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 reveal delay-200">
+                    <div class="flow-step">
+                        <div class="flow-icon text-dark"><i data-lucide="layout-dashboard" style="width: 32px; height: 32px;"></i></div>
+                        <h6 class="fw-bold">4. Dashboard Read</h6>
+                        <p class="small text-muted m-0">Metrics dynamically update via Flask template engine.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="section-padding pt-0">
+        <div class="container">
+            <div class="cta-section p-5 reveal">
+                <div class="cta-bg-glow"></div>
+                <div class="row position-relative z-1 align-items-center">
+                    <div class="col-lg-8 text-center text-lg-start mb-4 mb-lg-0">
+                        <h2 class="text-white fw-bold mb-2">Ready to modernize your classroom?</h2>
+                        <p class="text-white-50 mb-0" style="font-size: 1.1rem;">Deploy SmartClass AI locally and experience automated roll calls in seconds.</p>
+                    </div>
+                    <div class="col-lg-4 text-center text-lg-end">
+                        <a href="/login" class="btn btn-light bg-white text-dark fw-bold px-4 py-3 rounded-3 shadow ripple">
+                            Go to Dashboard <i data-lucide="arrow-right" class="ms-1" style="width: 18px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 border-top border-light text-center">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-center gap-2 text-dark mb-2">
+                <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Logo" style="width: 20px; height: 20px; border-radius: 4px; object-fit: cover;"> 
+                <span class="fw-bold">SmartClass AI</span>
+            </div>
+            <p class="small text-muted m-0">© 2026 SmartClass AI. Built by your dedicated Engineering Assistant.</p>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // Scroll Observer Animation logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const reveals = document.querySelectorAll(".reveal");
+            const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                        observer.unobserve(entry.target); // Run once
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => revealOnScroll.observe(reveal));
+        });
+    </script>
+</body>
+</html>
