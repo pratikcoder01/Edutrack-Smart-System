@@ -1,0 +1,15 @@
+# Environments
+.env
+
+# Vercel
+.vercel
+node_modules/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# DB
+attendance.db
+*.csv

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartClass AI</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Overlay -->
+        <div class="sidebar-backdrop" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img src="images/logo.jpeg" alt="SmartClass AI Logo" class="me-2">
+                    <span>SmartClass AI</span>
+                </div>
+                <!-- Close Button (Mobile Only) -->
+                <button class="btn btn-link text-dark d-lg-none p-0 border-0" id="closeSidebarBtn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item active ripple">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </a>
+                <a href="/enroll" class="nav-item ripple">
+                    <i data-lucide="user-plus"></i> Attendance
+                </a>
+                <a href="/records" class="nav-item ripple">
+                    <i data-lucide="bar-chart-2"></i> Analytics
+                </a>
+                <a href="/settings" class="nav-item ripple">
+                    <i data-lucide="settings"></i> Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="nav-left d-flex align-items-center gap-3">
+                    <!-- Hamburger Toggle (Mobile Only) -->
+                    <button class="btn btn-light d-lg-none d-flex align-items-center justify-content-center p-2 rounded-3 border-0 shadow-sm" id="sidebarToggleBtn">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <h5 class="mb-0 fw-bold d-none d-sm-block">Dashboard</h5>
+                </div>
+                <div class="nav-right d-flex align-items-center gap-3 gap-md-4">
+                    <div class="system-status d-none d-md-flex align-items-center">
+                        <span class="status-dot pulse"></span>
+                        <span class="status-text text-success small fw-semibold">System Active</span>
+                    </div>
+                    <div class="current-time small fw-medium text-muted" id="clock">
+                        --:--:--
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Profile" class="rounded-circle profile-img">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="content-wrapper p-4 p-md-5 page-transition">
+                <div class="ultrawide-container">
+                    
+<div class="row g-4 pt-2">
+    <!-- Header -->
+    <div class="col-12 mb-2 d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="fw-bold text-dark d-flex align-items-center gap-2">
+                <i data-lucide="pie-chart" class="text-primary"></i> Analytics Hub
+                <span id="connStatusBadge" class="badge ms-2 tracking-widest text-uppercase" style="font-size: 0.65rem; display: none;"></span>
+            </h4>
+            <p class="text-muted small">Comprehensive smart classroom analytics</p>
+        </div>
+        <div>
+            <a href="/export_csv" class="btn btn-primary btn-sm d-flex align-items-center gap-2 ripple shadow-sm">
+                <i data-lucide="download" style="width: 16px; height: 16px;"></i> Download Report
+            </a>
+        </div>
+    </div>
+
+    <!-- 3 Metrics Cards (Fluid Grid) -->
+    <div class="col-12">
+        <div class="stat-grid mb-2">
+            <div class="glass-card p-5 h-100 animate-fade-in stagger-1 ripple">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-secondary small fw-bold text-uppercase tracking-wide m-0">Avg. Attendance</h6>
+                    <div class="stat-card-icon bg-blue-soft m-0"><i data-lucide="activity"></i></div>
+                </div>
+                <div class="h2 text-dark fw-bold mb-1"><span class="counter" data-target="">0</span>%</div>
+                <div class="small text-success d-flex align-items-center gap-1 fw-medium">
+                    <i data-lucide="trending-up" style="width:14px; height:14px;"></i> System Optimal
+                </div>
+            </div>
+
+            <div class="glass-card p-5 h-100 animate-fade-in stagger-2 ripple">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-secondary small fw-bold text-uppercase tracking-wide m-0">Peak Date</h6>
+                    <div class="stat-card-icon bg-purple-soft m-0"><i data-lucide="calendar"></i></div>
+                </div>
+                <div class="h3 text-dark fw-bold mb-1"></div>
+                <div class="small text-muted d-flex align-items-center gap-1 fw-medium">
+                    Highest engagement tracking
+                </div>
+            </div>
+
+            <div class="glass-card p-5 h-100 animate-fade-in stagger-3 ripple">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-secondary small fw-bold text-uppercase tracking-wide m-0">Total Students</h6>
+                    <div class="stat-card-icon bg-green-soft m-0"><i data-lucide="users"></i></div>
+                </div>
+                <div class="h2 text-dark fw-bold mb-1 counter" data-target="">0</div>
+                <div class="small text-muted d-flex align-items-center gap-1 fw-medium">
+                    Registered in system
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1: Line Chart (Full Width) -->
+    <div class="col-12">
+        <div class="glass-card p-4 animate-fade-in stagger-4">
+            <h6 class="text-secondary small fw-bold mb-4 text-uppercase tracking-wide">Daily Presence Trend</h6>
+            <div style="height: 320px;">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2: Bar & Pie Charts -->
+    <div class="col-lg-8">
+        <div class="glass-card p-4 h-100 animate-fade-in stagger-5">
+            <h6 class="text-secondary small fw-bold mb-4 text-uppercase tracking-wide">Subject-wise Attendance</h6>
+            <div style="height: 300px;">
+                <canvas id="subjectChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100 animate-fade-in stagger-6 d-flex flex-column align-items-center justify-content-center">
+            <h6 class="text-secondary small fw-bold text-uppercase tracking-wide align-self-start w-100">Status Distribution</h6>
+            <div style="height: 250px; width: 100%; display: flex; justify-content: center; margin-top: 1rem;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        // --- Initialize Empty Charts ---
+        const tooltipTheme = {
+            backgroundColor: '#0f172a',
+            titleFont: { family: 'Inter', size: 13 },
+            bodyFont: { family: 'Inter', size: 13 },
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: false
+        };
+
+        const gridOptions = { color: '#f1f5f9', drawBorder: false };
+        const tickOptions = { color: '#64748b', font: { family: 'Inter', size: 11 } };
+
+        const ctxTrend = document.getElementById('trendChart').getContext('2d');
+        const gradientTrend = ctxTrend.createLinearGradient(0, 0, 0, 320);
+        gradientTrend.addColorStop(0, 'rgba(37, 99, 235, 0.15)');
+        gradientTrend.addColorStop(1, 'rgba(37, 99, 235, 0)');
+
+        window.trendChart = new Chart(ctxTrend, {
+            type: 'line',
+            data: { labels: [], datasets: [{ label: 'Present Students', data: [], borderColor: '#2563eb', backgroundColor: gradientTrend, fill: true, tension: 0.4, borderWidth: 3, pointBackgroundColor: '#ffffff', pointBorderColor: '#2563eb', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1200, easing: 'easeOutQuart' }, scales: { y: { beginAtZero: true, grid: gridOptions, ticks: tickOptions }, x: { grid: { display: false }, ticks: tickOptions } }, plugins: { legend: { display: false }, tooltip: tooltipTheme } }
+        });
+
+        const ctxSubject = document.getElementById('subjectChart').getContext('2d');
+        const gradientSubject = ctxSubject.createLinearGradient(0, 0, 0, 300);
+        gradientSubject.addColorStop(0, 'rgba(139, 92, 246, 0.7)');
+        gradientSubject.addColorStop(1, 'rgba(139, 92, 246, 0.2)');
+
+        window.subjectChart = new Chart(ctxSubject, {
+            type: 'bar',
+            data: { labels: [], datasets: [{ label: 'Attendance Count', data: [], backgroundColor: gradientSubject, borderRadius: 6, borderSkipped: false }] },
+            options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1200, easing: 'easeOutQuart', delay: 200 }, scales: { y: { beginAtZero: true, grid: gridOptions, ticks: tickOptions }, x: { grid: { display: false }, ticks: tickOptions } }, plugins: { legend: { display: false }, tooltip: tooltipTheme } }
+        });
+
+        const ctxStatus = document.getElementById('statusChart').getContext('2d');
+        window.statusChart = new Chart(ctxStatus, {
+            type: 'doughnut',
+            data: { labels: [], datasets: [{ data: [], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0, hoverOffset: 4 }] },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '75%', animation: { duration: 1200, easing: 'easeOutQuart', delay: 400 }, plugins: { legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyle: 'circle', font: { family: 'Inter', size: 12 } } }, tooltip: { backgroundColor: '#0f172a', titleFont: { family: 'Inter', size: 13 }, bodyFont: { family: 'Inter', size: 13 }, padding: 12, cornerRadius: 8 } } }
+        });
+
+
+        // --- Initialize Animated Counters ---
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        counters.forEach(counter => {
+            const upd = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(upd, 10);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            setTimeout(upd, 200);
+        });
+
+        const animateValue = (el, start, end, duration, suffix="") => {
+            if (!el) return;
+            if (start === end) { el.innerText = end + suffix; return; }
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                el.innerText = Math.floor(progress * (end - start) + start) + suffix;
+                if (progress < 1) window.requestAnimationFrame(step);
+                else el.innerText = end + suffix;
+            };
+            window.requestAnimationFrame(step);
+        };
+        
+        const connBadge = document.getElementById('connStatusBadge');
+        const showConnState = (state, color, text) => {
+            if(!connBadge) return;
+            connBadge.style.display = 'inline-block';
+            connBadge.className = `badge bg-${color} ms-2 tracking-widest text-uppercase`;
+            connBadge.innerText = text;
+            if(state === 'online') setTimeout(() => connBadge.style.display = 'none', 3000);
+        };
+
+        const fetchChartData = async () => {
+            try {
+                const res = await fetch('/api/getAnalysis');
+                if (!res.ok) {
+                    if(res.status === 503) {
+                        showConnState('offline', 'warning', 'SETUP REQUIRED');
+                        return;
+                    }
+                    throw new Error('Network error');
+                }
+                const data = await res.json();
+                
+                showConnState('online', 'success', 'LIVE');
+
+                // Update Cards
+                const avgEl = document.querySelector('.glass-card.stagger-1 .counter');
+                const totEl = document.querySelector('.glass-card.stagger-3 .counter');
+                
+                animateValue(avgEl, parseInt(avgEl.innerText) || 0, data.metrics.avg_attendance, 500);
+                animateValue(totEl, parseInt(totEl.innerText) || 0, data.metrics.total_students, 500);
+                document.querySelector('.glass-card.stagger-2 .h3').innerText = data.metrics.peak_date;
+
+                // Update Charts
+                if(window.trendChart) {
+                    window.trendChart.data.labels = data.trend.labels;
+                    window.trendChart.data.datasets[0].data = data.trend.values;
+                    window.trendChart.update();
+                }
+                if(window.subjectChart) {
+                    window.subjectChart.data.labels = data.subject.labels;
+                    window.subjectChart.data.datasets[0].data = data.subject.values;
+                    window.subjectChart.update();
+                }
+                if(window.statusChart) {
+                    window.statusChart.data.labels = data.status.labels;
+                    window.statusChart.data.datasets[0].data = data.status.values;
+                    window.statusChart.update();
+                }
+            } catch (err) { 
+                console.error("Error refreshing chart data:", err); 
+                showConnState('offline', 'danger', 'DATA TIMEOUT');
+            }
+        };
+
+        // Fetch data immediately
+        fetchChartData();
+        
+    });
+</script>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Responsive Sidebar Toggle Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const toggleBtn = document.getElementById('sidebarToggleBtn');
+            const closeBtn = document.getElementById('closeSidebarBtn');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('show');
+                overlay.classList.toggle('show');
+            }
+
+            if(toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+            if(closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+            if(overlay) overlay.addEventListener('click', toggleSidebar);
+        });
+    </script>
+    
+    <!-- Global Toast Container for AI Activity Feed -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1055;">
+            <!-- Toasts will be injected dynamically here -->
+        </div>
+    </div>
+    
+</body>
+</html>
